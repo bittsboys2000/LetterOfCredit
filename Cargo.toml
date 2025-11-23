@@ -1,0 +1,10 @@
+[workspace]
+members = [
+    "common",
+    "services/document",
+    "services/lc-workflow",
+    "services/audit",
+    "services/chain-adapter",
+    "services/migration-runner",
+]
+resolver = "2"

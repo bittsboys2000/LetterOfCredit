@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LC Chain | Digital Trade Finance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #020617;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .brand svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .user-panel {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        select.role-selector {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 1.25rem 0;
+            color: var(--text-main);
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            color: var(--text-main);
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft {
+            background: rgba(148, 163, 184, 0.2);
+            color: #cbd5e1;
+        }
+
+        .status-submitted {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .status-review {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease;
+            min-width: 300px;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Utility */
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside>
+        <div class="brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                </path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            LC Chain
+        </div>
+
+        <nav>
+            <div class="nav-item active" onclick="app.navigate('dashboard')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Dashboard
+            </div>
+            <div class="nav-item" onclick="app.navigate('create')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                New Application
+            </div>
+            <div class="nav-item" onclick="app.navigate('audit')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Audit Logs
+            </div>
+        </nav>
+
+        <div class="user-panel">
+            <span class="role-badge" id="currentRoleBadge">Importer</span>
+            <select class="role-selector" id="roleSelect" onchange="app.setRole(this.value)">
+                <option value="Importer">Importer</option>
+                <option value="Exporter">Exporter</option>
+                <option value="IssuingBank">Issuing Bank</option>
+                <option value="AdvisingBank">Advising Bank</option>
+                <option value="Auditor">Auditor</option>
+            </select>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <h1 id="pageTitle">Dashboard</h1>
+            <button class="btn btn-secondary" onclick="app.refresh()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6"></path>
+                    <path d="M1 20v-6h6"></path>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                Refresh
+            </button>
+        </header>
+
+        <!-- Dashboard View -->
+        <div id="view-dashboard" class="view fade-in">
+            <div class="card">
+                <h2>Active Letters of Credit</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>LC ID</th>
+                                <th>Beneficiary</th>
+                                <th>Amount</th>
+                                <th>Expiry</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lcTableBody">
+                            <tr>
+                                <td colspan="6" class="empty-state">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create View -->
+        <div id="view-create" class="view hidden fade-in">
+            <div class="card">
+                <h2>1. Upload Supporting Documents</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Upload the Proforma Invoice or Contract
+                    (PDF/Image). This will be encrypted and stored on IPFS.</p>
+
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <input type="file" id="docUploadInput">
+                    <button class="btn btn-secondary" onclick="app.uploadDocument()" id="btnUpload">
+                        Upload to IPFS
+                    </button>
+                </div>
+                <div id="uploadStatus" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+            </div>
+
+            <div class="card">
+                <h2>2. Application Details</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Beneficiary ID (Exporter)</label>
+                        <input type="text" id="lcBeneficiary" value="00000000-0000-0000-0000-000000000002">
+                    </div>
+                    <div class="form-group">
+                        <label>Issuing Bank ID</label>
+                        <input type="text" id="lcIssuingBank" value="00000000-0000-0000-0000-000000000003">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (USD)</label>
+                        <input type="number" id="lcAmount" value="50000">
+                    </div>
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="date" id="lcExpiry">
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; text-align: right;">
+                    <button class="btn btn-primary" onclick="app.createLC()" id="btnCreate">
+                        Submit Application
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit View -->
+        <div id="view-audit" class="view hidden fade-in">
+            <div class="card">
+                <h2>System Audit Trail</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Event</th>
+                                <th>Actor</th>
+                                <th>Resource</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody">
+                            <tr>
+                                <td colspan="5" class="empty-state">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container" id="toastContainer"></div>
+    </main>
+
+    <script>
+        const API = {
+            DOC: 'http://localhost:3001',
+            LC: 'http://localhost:3002',
+            AUDIT: 'http://localhost:3003'
+        };
+
+        class App {
+            constructor() {
+                this.role = 'Importer';
+                this.uploadedDocId = null;
+                this.init();
+            }
+
+            init() {
+                // Set default date
+                const date = new Date();
+                date.setDate(date.getDate() + 30);
+                document.getElementById('lcExpiry').valueAsDate = date;
+
+                this.navigate('dashboard');
+            }
+
+            setRole(role) {
+                this.role = role;
+                document.getElementById('currentRoleBadge').innerText = role;
+                this.showToast(`Switched role to ${role}`, 'info');
+                this.refresh();
+            }
+
+            navigate(view) {
+                document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
+                document.getElementById(`view-${view}`).classList.remove('hidden');
+
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                // Simple active state logic
+                if (view === 'dashboard') document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+                if (view === 'create') document.querySelector('.nav-item:nth-child(2)').classList.add('active');
+                if (view === 'audit') document.querySelector('.nav-item:nth-child(3)').classList.add('active');
+
+                const titles = { 'dashboard': 'Dashboard', 'create': 'New Application', 'audit': 'Audit Logs' };
+                document.getElementById('pageTitle').innerText = titles[view];
+
+                if (view === 'dashboard' || view === 'audit') this.refresh();
+            }
+
+            refresh() {
+                if (!document.getElementById('view-dashboard').classList.contains('hidden')) this.loadDashboard();
+                if (!document.getElementById('view-audit').classList.contains('hidden')) this.loadAudit();
+            }
+
+            // --- API Interactions ---
+
+            getToken() {
+                // Mock token generation. In prod, this would be a real JWT from Auth0/Cognito/etc.
+                return "MOCK_TOKEN_" + this.role;
+            }
+
+            async loadDashboard() {
+                const tbody = document.getElementById('lcTableBody');
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Loading...</td></tr>';
+
+                try {
+                    // In a real app we might have a 'list' endpoint. 
+                    // Here we'll just try to fetch a known ID or handle the 404 gracefully if we don't have a list endpoint implemented yet.
+                    // Wait, we only implemented GET /lc/:id. We didn't implement GET /lc (list).
+                    // For the demo to work without a list endpoint, I'll fetch the one created in tests if it exists, 
+                    // or we can implement a list endpoint quickly. 
+                    // Actually, let's just mock the list for now since the backend doesn't have a "List All" endpoint yet.
+                    // OR, better, let's add a list endpoint to the backend? 
+                    // No, user asked to refine UI. I will simulate the list for now or fetch a hardcoded ID if I know it.
+                    // Let's simulate the list but try to fetch status for one known ID if user created one.
+
+                    // NOTE: Since we don't have a LIST endpoint, I will mock the list data for the dashboard 
+                    // but use REAL calls for actions.
+
+                    // However, to make it "real", I should probably store the IDs in localStorage or something.
+                    const storedIds = JSON.parse(localStorage.getItem('lc_ids') || '[]');
+
+                    if (storedIds.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No Letters of Credit found. Create one to get started.</td></tr>';
+                        return;
+                    }
+
+                    tbody.innerHTML = '';
+                    for (const id of storedIds) {
+                        try {
+                            const res = await fetch(`${API.LC}/lc/${id}`, {
+                                headers: { 'Authorization': 'Bearer ' + this.getToken() }
+                            });
+                            if (!res.ok) continue;
+                            const lc = await res.json();
+                            this.renderRow(tbody, lc);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                } catch (e) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="empty-state" style="color: var(--danger)">Error loading data: ${e.message}</td></tr>`;
+                }
+            }
+
+            renderRow(tbody, lc) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+            <td style="font-family: monospace; font-size: 0.9em;">${lc.id.substring(0, 8)}...</td>
+            <td>${lc.beneficiary_id.substring(0, 8)}...</td>
+            <td>$${parseFloat(lc.amount).toLocaleString()}</td>
+            <td>${new Date(lc.expiry_date).toLocaleDateString()}</td>
+            <td><span class="status status-${lc.status.toLowerCase()}">${lc.status}</span></td>
+            <td>${this.getActions(lc)}</td>
+        `;
+                tbody.appendChild(tr);
+            }
+
+            getActions(lc) {
+                if (this.role === 'Importer' && lc.status === 'Draft') {
+                    return `<button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" onclick="app.updateStatus('${lc.id}', 'Submitted')">Submit</button>`;
+                }
+                if (this.role === 'IssuingBank' && lc.status === 'Submitted') {
+                    return `<button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" onclick="app.updateStatus('${lc.id}', 'Review')">Start Review</button>`;
+                }
+                if (this.role === 'IssuingBank' && lc.status === 'Review') {
+                    return `
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem; background-color: var(--success);" onclick="app.updateStatus('${lc.id}', 'Approved')">Approve</button>
+                    <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem; background-color: var(--danger);" onclick="app.updateStatus('${lc.id}', 'Rejected')">Reject</button>
+                </div>
+            `;
+                }
+                return '<span style="color: var(--text-muted);">-</span>';
+            }
+
+            async updateStatus(id, status) {
+                try {
+                    const res = await fetch(`${API.LC}/lc/${id}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': 'Bearer ' + this.getToken(),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status })
+                    });
+
+                    if (res.ok) {
+                        this.showToast(`LC status updated to ${status}`, 'success');
+                        this.loadDashboard();
+                    } else {
+                        const err = await res.text();
+                        this.showToast(`Update failed: ${err}`, 'error');
+                    }
+                } catch (e) {
+                    this.showToast('Network error', 'error');
+                }
+            }
+
+            async uploadDocument() {
+                const fileInput = document.getElementById('docUploadInput');
+                const btn = document.getElementById('btnUpload');
+                const status = document.getElementById('uploadStatus');
+
+                if (!fileInput.files[0]) return this.showToast('Please select a file', 'error');
+
+                btn.disabled = true;
+                btn.innerHTML = 'Uploading...';
+                status.innerHTML = '';
+
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                try {
+                    const res = await fetch(`${API.DOC}/documents`, {
+                        method: 'POST',
+                        headers: { 'Authorization': 'Bearer ' + this.getToken() },
+                        body: formData
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        this.uploadedDocId = data.document_id;
+                        status.innerHTML = `<span style="color: var(--success)">✅ Uploaded successfully! ID: ${data.document_id}</span>`;
+                        this.showToast('Document uploaded to IPFS', 'success');
+                    } else {
+                        throw new Error('Upload failed');
+                    }
+                } catch (e) {
+                    status.innerHTML = `<span style="color: var(--danger)">❌ Upload failed</span>`;
+                    this.showToast('Upload failed', 'error');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Upload to IPFS';
+                }
+            }
+
+            async createLC() {
+                if (!this.uploadedDocId) return this.showToast('Please upload a document first', 'error');
+
+                const btn = document.getElementById('btnCreate');
+                btn.disabled = true;
+                btn.innerHTML = 'Submitting...';
+
+                const payload = {
+                    beneficiary_id: document.getElementById('lcBeneficiary').value,
+                    issuing_bank_id: document.getElementById('lcIssuingBank').value,
+                    advising_bank_id: "00000000-0000-0000-0000-000000000004",
+                    amount: document.getElementById('lcAmount').value,
+                    currency: "USD",
+                    expiry_date: new Date(document.getElementById('lcExpiry').value).toISOString(),
+                    document_ids: [this.uploadedDocId]
+                };
+
+                try {
+                    const res = await fetch(`${API.LC}/lc`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + this.getToken(),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        // Save ID to local storage for demo purposes
+                        const ids = JSON.parse(localStorage.getItem('lc_ids') || '[]');
+                        ids.push(data.id);
+                        localStorage.setItem('lc_ids', JSON.stringify(ids));
+
+                        this.showToast('L/C Application Created Successfully', 'success');
+                        this.navigate('dashboard');
+                    } else {
+                        const err = await res.text();
+                        this.showToast(`Creation failed: ${err}`, 'error');
+                    }
+                } catch (e) {
+                    this.showToast('Network error', 'error');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Submit Application';
+                }
+            }
+
+            async loadAudit() {
+                const tbody = document.getElementById('auditTableBody');
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading...</td></tr>';
+
+                try {
+                    const res = await fetch(`${API.AUDIT}/audit`, {
+                        headers: { 'Authorization': 'Bearer ' + this.getToken() }
+                    });
+
+                    if (res.ok) {
+                        const logs = await res.json();
+                        if (logs.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No audit logs found</td></tr>';
+                            return;
+                        }
+                        tbody.innerHTML = '';
+                        logs.forEach(log => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                        <td>${new Date(log.timestamp).toLocaleString()}</td>
+                        <td><span class="status" style="background: rgba(255,255,255,0.1)">${log.event_type}</span></td>
+                        <td>${log.actor_id.substring(0, 8)}...</td>
+                        <td>${log.resource_id.substring(0, 8)}...</td>
+                        <td style="font-size: 0.85em; color: var(--text-muted);">${JSON.stringify(log.details).substring(0, 50)}...</td>
+                    `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                } catch (e) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="empty-state" style="color: var(--danger)">Error loading logs</td></tr>`;
+                }
+            }
+
+            showToast(msg, type = 'info') {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `<span>${msg}</span>`;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        }
+
+        const app = new App();
+    </script>
+</body>
+
+</html>
