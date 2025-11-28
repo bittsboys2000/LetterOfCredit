@@ -45,3 +45,18 @@ pub struct CreateLcRequest {
 pub struct UpdateStatusRequest {
     pub status: LcStatus,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct ListLcQuery {
+    pub limit: Option<u32>,
+    pub offset: Option<u32>,
+    pub status: Option<LcStatus>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct LcListResponse {
+    pub items: Vec<LetterOfCredit>,
+    pub total: u64,
+    pub limit: u32,
+    pub offset: u32,
+}

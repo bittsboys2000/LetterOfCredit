@@ -24,6 +24,11 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    // Validate encryption configuration at startup
+    encryption::validate_encryption_config()
+        .expect("Failed to validate encryption configuration");
+    tracing::info!("Encryption configuration validated");
+
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let ipfs_url = env::var("IPFS_API_URL").expect("IPFS_API_URL must be set");
 

@@ -1,5 +1,5 @@
 use axum::{
-    routing::{get, post, put},
+    routing::{get, post},
     Router,
 };
 use common::db;
@@ -10,7 +10,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 mod handlers;
 mod models;
 
-use handlers::{AppState, create_lc, get_lc, list_lcs, update_lc_status};
+use handlers::{AppState, login, register, get_me, list_users, get_user};
 
 #[tokio::main]
 async fn main() {
@@ -23,33 +23,30 @@ async fn main() {
         .init();
 
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let chain_adapter_url = env::var("CHAIN_ADAPTER_URL").ok();
-    let audit_service_url = env::var("AUDIT_SERVICE_URL").ok();
-
-    if chain_adapter_url.is_some() {
-        tracing::info!("Chain adapter integration enabled");
-    }
-    if audit_service_url.is_some() {
-        tracing::info!("Audit service integration enabled");
-    }
+    let jwt_secret = env::var("JWT_SECRET").unwrap_or_else(|_| {
+        tracing::warn!("JWT_SECRET not set, using default (NOT FOR PRODUCTION)");
+        "supersecretkey".to_string()
+    });
 
     let pool = db::create_pool(&db_url).await.expect("Failed to connect to DB");
 
     let state = Arc::new(AppState {
         db: pool,
-        chain_adapter_url,
-        audit_service_url,
+        jwt_secret,
     });
 
     let app = Router::new()
-        .route("/lc", post(create_lc).get(list_lcs))
-        .route("/lc/:id", get(get_lc))
-        .route("/lc/:id/status", put(update_lc_status))
+        .route("/auth/register", post(register))
+        .route("/auth/login", post(login))
+        .route("/users/me", get(get_me))
+        .route("/users", get(list_users))
+        .route("/users/:id", get(get_user))
         .with_state(state)
         .layer(tower_http::cors::CorsLayer::permissive());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3002));
-    tracing::info!("LC Workflow Service listening on {}", addr);
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3005));
+    tracing::info!("User Service listening on {}", addr);
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
+

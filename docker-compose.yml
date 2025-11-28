@@ -11,6 +11,11 @@ services:
       - "5432:5432"
     volumes:
       - pg_main_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d lc_main"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   postgres-audit:
     image: postgres:15-alpine
@@ -22,6 +27,11 @@ services:
       - "5433:5432"
     volumes:
       - pg_audit_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d lc_audit"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   ipfs:
     image: ipfs/kubo:latest
@@ -38,6 +48,12 @@ services:
     ports:
       - "8545:8545"
       - "8546:8546"
+
+  # Optional: Redis for session caching (future enhancement)
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
 
 volumes:
   pg_main_data:
