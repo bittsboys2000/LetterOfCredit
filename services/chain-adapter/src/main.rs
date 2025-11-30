@@ -33,8 +33,8 @@ async fn main() {
 
     let app = Router::new()
         .route("/anchor", post(anchor_state))
-        .with_state(state)
-        .layer(tower_http::cors::CorsLayer::permissive());
+        .layer(tower_http::cors::CorsLayer::permissive())
+        .with_state(state);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3004));
     tracing::info!("Chain Adapter Service listening on {}", addr);

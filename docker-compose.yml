@@ -8,20 +8,9 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: lc_main
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - pg_main_data:/var/lib/postgresql/data
-
-  postgres-audit:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: lc_audit
-    ports:
-      - "5433:5432"
-    volumes:
-      - pg_audit_data:/var/lib/postgresql/data
 
   ipfs:
     image: ipfs/kubo:latest
@@ -41,5 +30,4 @@ services:
 
 volumes:
   pg_main_data:
-  pg_audit_data:
   ipfs_data:

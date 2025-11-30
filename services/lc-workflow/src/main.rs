@@ -34,8 +34,8 @@ async fn main() {
         .route("/lc", post(create_lc))
         .route("/lc/:id", get(get_lc))
         .route("/lc/:id/status", put(update_lc_status))
-        .with_state(state)
-        .layer(tower_http::cors::CorsLayer::permissive());
+        .layer(tower_http::cors::CorsLayer::permissive())
+        .with_state(state);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3002));
     tracing::info!("LC Workflow Service listening on {}", addr);

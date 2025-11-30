@@ -6,7 +6,6 @@ import os
 # Configuration
 BASE_URL_DOC = "http://localhost:3001"
 BASE_URL_LC = "http://localhost:3002"
-BASE_URL_AUDIT = "http://localhost:3003"
 BASE_URL_CHAIN = "http://localhost:3004"
 
 # Mock JWT Tokens (In a real scenario, these would be signed properly)
@@ -29,11 +28,7 @@ IMPORTER_ID = "00000000-0000-0000-0000-000000000001"
 EXPORTER_ID = "00000000-0000-0000-0000-000000000002"
 ISSUING_BANK_ID = "00000000-0000-0000-0000-000000000003"
 ADVISING_BANK_ID = "00000000-0000-0000-0000-000000000004"
-AUDITOR_ID = "00000000-0000-0000-0000-000000000005"
 
-TOKEN_IMPORTER = generate_token(IMPORTER_ID, "Importer")
-TOKEN_ISSUING_BANK = generate_token(ISSUING_BANK_ID, "IssuingBank")
-TOKEN_AUDITOR = generate_token(AUDITOR_ID, "Auditor")
 
 def print_step(step):
     print(f"\n{'='*20} {step} {'='*20}")
@@ -133,20 +128,7 @@ def test_approve_lc(lc_id):
         print(f"Approval Failed: {e}")
         return
 
-def test_audit_logs():
-    print_step("4. Check Audit Logs")
-    url = f"{BASE_URL_AUDIT}/audit"
-    headers = {"Authorization": f"Bearer {TOKEN_AUDITOR}"}
 
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        print(f"Retrieved {len(data)} audit logs.")
-        if len(data) > 0:
-            print("Latest Log:", json.dumps(data[0], indent=2))
-    except Exception as e:
-        print(f"Failed: {e}")
 
 if __name__ == "__main__":
     print("Starting Test Flow...")
@@ -156,5 +138,5 @@ if __name__ == "__main__":
     doc_id = test_upload_document()
     lc_id = test_create_lc(doc_id)
     test_approve_lc(lc_id)
-    test_audit_logs()
+
     print("\nTest Flow Complete.")
