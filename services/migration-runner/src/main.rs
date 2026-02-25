@@ -17,14 +17,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     migrator.run(&pool).await?;
     println!("Main DB migrations applied!");
 
-    // 2. Audit DB Migrations
-    let audit_db_url = env::var("AUDIT_DATABASE_URL").expect("AUDIT_DATABASE_URL must be set");
-    println!("Running migrations for Audit DB...");
-    let audit_pool = PgPoolOptions::new().connect(&audit_db_url).await?;
-    
-    let audit_migrator = Migrator::new(Path::new("./migrations_audit")).await?;
-    audit_migrator.run(&audit_pool).await?;
-    println!("Audit DB migrations applied!");
-
     Ok(())
 }

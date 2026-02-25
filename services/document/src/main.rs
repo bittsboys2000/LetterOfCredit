@@ -38,9 +38,9 @@ async fn main() {
     let app = Router::new()
         .route("/documents", post(upload_document))
         .route("/documents/:id", get(get_document))
-        .with_state(state)
+        .layer(tower_http::trace::TraceLayer::new_for_http())
         .layer(tower_http::cors::CorsLayer::permissive())
-        .layer(tower_http::trace::TraceLayer::new_for_http());
+        .with_state(state);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3001));
     tracing::info!("Document Service listening on {}", addr);
